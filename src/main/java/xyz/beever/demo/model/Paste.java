@@ -1,21 +1,21 @@
 package xyz.beever.demo.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-
-import javax.validation.constraints.NotBlank;
 import java.util.UUID;
 
-public class Person {
+public class Paste {
 
     private final UUID id;
-    @NotBlank
+
     private final String name;
 
-    public Person(@JsonProperty("id") UUID id,
-                  @JsonProperty("name") String name){
+    private String contents;
+
+
+
+    public Paste(UUID id, String name, String contents) {
         this.id = id;
         this.name = name;
+        this.contents = contents;
     }
 
     public UUID getId() {
@@ -25,5 +25,7 @@ public class Person {
     public String getName() {
         return name;
     }
+
+    public String getContents() { return contents; }
 
 }
