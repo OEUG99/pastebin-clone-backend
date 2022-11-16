@@ -1,40 +1,49 @@
 package xyz.beever.demo.api;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import xyz.beever.demo.dao.PasteRepository;
 import xyz.beever.demo.model.Paste;
-import xyz.beever.demo.service.PasteService;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 
 @RequestMapping("/api/v1/paste")
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PasteController {
 
-    private final PasteService pasteService;
+
 
     @Autowired
-    public PasteController(PasteService pasteService) {
-        this.pasteService = pasteService;
-    }
+    private PasteRepository pasteRepository;
+
 
     @PostMapping
-    public void addPaste(String title, String text)
-    {
-        pasteService.addPaste(title, text);
+
+    public void addPaste(@RequestBody @Validated Paste paste) {
+        pasteRepository.save(paste);
     }
 
     @GetMapping
     public List<Paste> getAllPastes(){
-        return pasteService.getAllPastes();
+        return (List<Paste>) pasteRepository.findAll();
     }
 
-    @GetMapping(path = "{id}")
-    public Paste getPasteById(@PathVariable("id") UUID id){
-        return pasteService.getPastesById(id);
+    @GetMapping(path="count/{count}")
+    public List<Paste> getPastes(int count){
+        // trim the results to count
+       List<Paste> result = (List<Paste>) pasteRepository.findAll();
+       return result.subList(0, count);
+     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Paste> findUserById(@PathVariable(value = "id") long id) {
+        Optional<Paste> paste = pasteRepository.findById(id);
+
+        return paste.map(value -> ResponseEntity.ok().body(value)).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
 }
