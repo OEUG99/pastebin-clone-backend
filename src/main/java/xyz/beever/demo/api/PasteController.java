@@ -41,7 +41,7 @@ public class PasteController {
      }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Paste> findUserById(@PathVariable(value = "id") String id) {
+    public ResponseEntity<Paste> findUserById(@PathVariable(value = "id") UUID id) {
         Optional<Paste> paste = pasteRepository.findById(id);
 
         return paste.map(value -> ResponseEntity.ok().body(value)).orElseGet(() -> ResponseEntity.notFound().build());

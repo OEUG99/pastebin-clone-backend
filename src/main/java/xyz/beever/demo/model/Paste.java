@@ -1,6 +1,7 @@
 package xyz.beever.demo.model;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.Id;
 
 import javax.persistence.Column;
@@ -15,9 +16,10 @@ public class Paste {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
-            name = "String",
+            name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
+    @Type(type="uuid-char")
     private UUID Id;
 
     @Column(columnDefinition="VARCHAR(15)")

@@ -10,5 +10,5 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository("PasteDataAccess")
-public interface PasteRepository extends CrudRepository<Paste,String> {
+public interface PasteRepository extends CrudRepository<Paste,UUID> {
 }
