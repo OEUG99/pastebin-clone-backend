@@ -9,25 +9,26 @@ import xyz.beever.demo.model.Paste;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RequestMapping("/api/v1/paste")
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PasteController {
 
-
-
     @Autowired
     private PasteRepository pasteRepository;
 
-
     @PostMapping
-
-    public void addPaste(@RequestBody @Validated Paste paste) {
+    public UUID addPaste(@RequestBody @Validated Paste paste) {
         pasteRepository.save(paste);
+
+        System.out.println(paste.getId());
+        return paste.getId();
+
     }
 
-    @GetMapping
+    @GetMapping(path = "all/")
     public List<Paste> getAllPastes(){
         return (List<Paste>) pasteRepository.findAll();
     }
@@ -40,10 +41,9 @@ public class PasteController {
      }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Paste> findUserById(@PathVariable(value = "id") long id) {
+    public ResponseEntity<Paste> findUserById(@PathVariable(value = "id") String id) {
         Optional<Paste> paste = pasteRepository.findById(id);
 
         return paste.map(value -> ResponseEntity.ok().body(value)).orElseGet(() -> ResponseEntity.notFound().build());
     }
-
 }
